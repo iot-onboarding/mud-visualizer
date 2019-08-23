@@ -21,7 +21,7 @@ app.on('ready',function(){
     // mainWindow.maximize()
     
     // openninng dev tools 
-    // mainWindow.openDevTools();
+     mainWindow.openDevTools();
 
     // load html in window 
     mainWindow.loadURL(url.format({

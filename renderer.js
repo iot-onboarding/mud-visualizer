@@ -82,12 +82,15 @@ function mud_drawer(inp_json) {
   var link = svg.append("g")
     .selectAll("path")
     .data(graph.links.filter(function (d) {
+      if (allNodesObj.getNode(d.source).is_controlle_or_mycontroller()) { // it's enought to check the source because in the design the target is alwasy router or internet
+        return (set_difference(get_devices_names(d['outgoing']['device:flow']), excluded_models).length > 0 ||
+          set_difference(get_devices_names(d['incoming']['device:flow']), excluded_models).length > 0);
+      }
       return (
         (set_difference(get_devices_names(d['outgoing']['device:flow']), excluded_models).length > 0 ||
           set_difference(get_devices_names(d['incoming']['device:flow']), excluded_models).length > 0) && // this filters the mudfile links that are deselected in the selection menu
         !excluded_models.includes(d.source) && // also filter if the source or destination of the connection is in the exclusion list 
-        !excluded_models.includes(d.target)
-        )
+        !excluded_models.includes(d.target))
     }))
     .enter().append("svg:path")
     .attr("fill", "none")
@@ -281,7 +284,7 @@ function mud_drawer(inp_json) {
     .style("height", "0px")
     .style("width", "0px")
     .style("opacity", 0);
-  
+
     //makes draggable element
     $( function()  {$( "#nodestooltip" ).draggable(); } );
 
@@ -540,9 +543,22 @@ function mud_drawer(inp_json) {
 
 var network = new Mud_Network();
 var network_data;
-require('electron').ipcRenderer.on('draw', (event, message) => {
-  d3.selectAll("svg > *").remove();
-  var remote = require('electron').remote;
+var userAgent = navigator.userAgent.toLowerCase();
+network.ready_to_draw = false;
+
+
+if (userAgent.indexOf(' electron/') > -1) {
+  // in case we are running electron
+  function opengithub() {
+    // used in about.html page
+    var { shell } = require('electron');
+    let url = "https://github.com/vafa-Andalibi/mudvisualizer";
+    shell.openExternal(url);
+  }
+
+  require('electron').ipcRenderer.on('draw', (event, message) => {
+    d3.selectAll("svg > *").remove();
+    var remote = require('electron').remote;
 
   network.ready_to_draw = false;
   // let data = remote.getGlobal('sharedObj');
@@ -565,29 +581,26 @@ require('electron').ipcRenderer.on('draw', (event, message) => {
   // network.add_mudfile(JSON.parse(data));
   network.create_network()
 
-  var interval = setInterval(function () {
-    if (network.ready_to_draw == false) {
-      return;
-    }
-    clearInterval(interval);
-    network_data = network.get_nodes_links_json();
-    mud_drawer(network_data);
-  }, 100);
-})
+    var interval = setInterval(function () {
+      if (network.ready_to_draw == false) {
+        return;
+      }
+      clearInterval(interval);
+      network_data = network.get_nodes_links_json();
+      mud_drawer(network_data);
+    }, 100);
+  });
+  require('electron').ipcRenderer.on('resize', (event, message) => {
+    width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    d3.select("svg").attr("height", height);
+    d3.select("svg").attr("width", width);
+  })
 
-
-require('electron').ipcRenderer.on('resize', (event, message) => {
-  width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-  height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-  d3.select("svg").attr("height", height);
-  d3.select("svg").attr("width", width);
-})
-
-
-require('electron').ipcRenderer.on('clearsvg', (event, message) => {
-  d3.selectAll("svg > *").remove();
-});
-
+  require('electron').ipcRenderer.on('clearsvg', (event, message) => {
+    d3.selectAll("svg > *").remove();
+  });
+}
 
 // this is for fading in/out select mud-file menu
 var mudfile_select_menu_open = false;
@@ -667,8 +680,10 @@ $('body').on('click', 'input[id="mudcheckbox"]', function () {
 
 // used in mainWindow.html in refresh button
 function drawer() {
-  d3.selectAll("svg > *").remove();
-  mud_drawer(network_data);
+  if (network_data != null) {
+    d3.selectAll("svg > *").remove();
+    mud_drawer(network_data);
+  }
 }
 
 
@@ -709,4 +724,70 @@ function get_devices_names(arr) {
   return device_ids;
 }
 
+function openfile() {
+  var files_data = {};
+  dialog.showOpenDialog({ properties: ["multiSelections", "openFile"] }, (fileNames) => {
+    // fileNames is an array that contains all the selected
+    if (fileNames === undefined) {
+      console.log("No file selected");
+      return;
+    }
 
+    for (var file_idx in fileNames) {
+      var filepath = fileNames[file_idx];
+      var data = fs.readFileSync(filepath, 'utf-8');
+      files_data[file_idx] = data;
+    }
+    global.sharedObj = JSON.stringify(files_data);
+    mainWindow.webContents.send('draw', 'draw');
+  });
+  json_data_loaded = true;
+}
+
+
+$('#openfile-button').click(function () {
+  $('#openfile-input').click();
+});
+
+$('#openfile-input').change(function () {
+  var files = document.getElementById('openfile-input').files;
+  var filescontent = {};
+  // files is a FileList of File objects. List some properties.
+
+  var output = [];
+  var counter = 0 ;
+  for (var i = 0, f; f = files[i]; i++) {
+    (function (file) {
+      var reader = new FileReader();
+      // Closure to capture the file information.
+      reader.onload = (function (theFile) {
+        return function (e) {
+            filescontent[counter] = JSON.parse(e.target.result);
+
+            // alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(filescontent[i]));
+            if (counter == files.length-1){
+              d3.selectAll("svg > *").remove();
+              for (var mudfile_idx in filescontent) {
+                network.add_mudfile(filescontent[mudfile_idx]);
+              }
+              network.create_network()
+
+              var interval = setInterval(function () {
+                if (network.ready_to_draw == false) {
+                  return;
+                }
+                clearInterval(interval);
+                network_data = network.get_nodes_links_json();
+                mud_drawer(network_data);
+              }, 100);
+              $("#openfile-input")[0].value = "";
+            }
+            counter += 1;
+        }
+      })(f);
+      reader.readAsText(f);
+    })(f);
+  }
+
+
+});
