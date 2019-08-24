@@ -561,26 +561,24 @@ if (userAgent.indexOf(' electron/') > -1) {
     d3.selectAll("svg > *").remove();
     var remote = require('electron').remote;
 
-  network.ready_to_draw = false;
-  // let data = remote.getGlobal('sharedObj');
-  let sharedobj = JSON.parse(remote.getGlobal('sharedObj'));
-  for (var mudfile_idx in sharedobj) {
-    try {
-      network.add_mudfile(JSON.parse(sharedobj[mudfile_idx]));
+    network.ready_to_draw = false;
+    let sharedobj = JSON.parse(remote.getGlobal('sharedObj'));
+    for (var mudfile_idx in sharedobj) {
+      try {
+        network.add_mudfile(JSON.parse(sharedobj[mudfile_idx]));
+      }
+      catch (e) {
+        let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
+        html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + sharedobj[mudfile_idx] + "</pre>"
+        Swal.fire({
+          type: 'error',
+          title: 'Not a valid json file',
+          showConfirmButton: true,
+          html: html_message
+        });
+      }
     }
-    catch (e) {
-      let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
-      html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + sharedobj[mudfile_idx] + "</pre>"
-      Swal.fire({
-        type: 'error',
-        title: 'Not a valid json file',
-        showConfirmButton: true,
-        html: html_message
-      });
-    }
-  }
-  // network.add_mudfile(JSON.parse(data));
-  network.create_network()
+    network.create_network()
 
     var interval = setInterval(function () {
       if (network.ready_to_draw == false) {
@@ -778,7 +776,7 @@ $('#openfile-input').change(function () {
             }
             // alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(filescontent[i]));
             if (counter == files.length-1){
-
+              network.ready_to_draw = false;
               for (var mudfile_idx in filescontent) {
                 network.add_mudfile(filescontent[mudfile_idx]);
               }
