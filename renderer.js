@@ -520,9 +520,10 @@ function mud_drawer(inp_json) {
         // the next two lines is in case the table information is to be placed close to node instead of top left 
         //  .style("top", d.y - 50 + "px")
         //  .style("left", d.x - 600 + "px")
-        .style("top", "10px")
-        .style("left", "85px")
-        .style("display", "inline-block")
+
+        .style("margin-top", "10px")
+        .style("margin-left", "85px")
+        .style("display", "block")
         .style("height", null)
         .style("width", null)
         .style("bottom", null);
@@ -609,7 +610,7 @@ $("#SelectMudFiles").click(function () {
   if (mudfile_select_menu_open == false) {
     $("#mudSelectionDiv").fadeIn("slow", function () {
       mudfile_select_menu_open = true;
-    }).css("display", "inline-block");;
+    }).css("display", "block");;
   }
 });
 
@@ -625,7 +626,10 @@ $("div:not(#nodestooltip)").click(function () {
   if (tooltip_status == 'ready-to-hide') {
     $("div[id='nodestooltip']").each(function () {
       $(this).animate({ opacity: 0 }, { duration: 100 })
-        .animate({ bottom: "0px", left: "0px", height: "0px", width: "0px" })
+        .animate({ bottom: "0px",
+        // left: "0px",
+        height: "0px",
+        width: "0px" })
     });
   }
   else if (tooltip_status = 'just-clicked') {
