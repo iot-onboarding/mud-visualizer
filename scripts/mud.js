@@ -159,7 +159,7 @@ class Mud_Network {
                             for (var abs_idx in accepted_abstractions) {
                                 var current_abstraction = accepted_abstractions[abs_idx];
                                 if (second_node.get_protocols_by_abstraction(direction, current_abstraction).length > 0) {
-                                    if (current_abstraction == "same-manufacturer" && second_node.manufacturer != first_node.manufacturer) {
+                                    if (second_node.manufacturer != first_node.manufacturer) {
                                         continue;
                                     }
 
