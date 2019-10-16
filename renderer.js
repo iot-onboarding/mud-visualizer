@@ -709,4 +709,79 @@ function get_devices_names(arr) {
   return device_ids;
 }
 
+function openfile() {
+  var files_data = {};
+  dialog.showOpenDialog({ properties: ["multiSelections", "openFile"] }, (fileNames) => {
+    // fileNames is an array that contains all the selected
+    if (fileNames === undefined) {
+      console.log("No file selected");
+      return;
+    }
 
+    for (var file_idx in fileNames) {
+      var filepath = fileNames[file_idx];
+      var data = fs.readFileSync(filepath, 'utf-8');
+      files_data[file_idx] = data;
+    }
+    global.sharedObj = JSON.stringify(files_data);
+    mainWindow.webContents.send('draw', 'draw');
+  });
+  json_data_loaded = true;
+}
+
+
+$('#openfile-button').click(function () {
+  $('#openfile-input').click();
+});
+
+$('#openfile-input').change(function () {
+  var files = document.getElementById('openfile-input').files;
+  var filescontent = {};
+  // files is a FileList of File objects. List some properties.
+
+  var output = [];
+  var counter = 0 ;
+  for (var i = 0, f; f = files[i]; i++) {
+    (function (file) {
+      var reader = new FileReader();
+      // Closure to capture the file information.
+      reader.onload = (function (theFile) {
+        return function (e) {
+            try {
+              filescontent[counter] = JSON.parse(e.target.result);
+            }
+            catch (error) {
+              let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
+              html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
+              Swal.fire({
+                type: 'error',
+                title: 'Not a valid json file',
+                showConfirmButton: true,
+                html: html_message
+              });
+            }
+            // alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(filescontent[i]));
+            if (counter == files.length-1){
+              network.ready_to_draw = false;
+              for (var mudfile_idx in filescontent) {
+                network.add_mudfile(filescontent[mudfile_idx]);
+              }
+              network.create_network()
+
+              var interval = setInterval(function () {
+                if (network.ready_to_draw == false) {
+                  return;
+                }
+                clearInterval(interval);
+                network_data = network.get_nodes_links_json();
+                mud_drawer(network_data);
+              }, 100);
+              $("#openfile-input")[0].value = "";
+            }
+            counter += 1;
+        }
+      })(f);
+      reader.readAsText(f);
+    })(f);
+  }
+});
