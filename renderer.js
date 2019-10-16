@@ -3,6 +3,7 @@ var excluded_models = [];
 var tooltip_status;
 var hover_ready = true;
 function mud_drawer(inp_json) {
+  d3.selectAll("svg > *").remove();
   var graph = JSON.parse(JSON.stringify(inp_json));
   // var graph = inp_json;
   var svg = d3.select("svg");
