@@ -288,6 +288,8 @@ function mud_drawer(inp_json) {
 
     }
 
+    $("#nodestooltip").remove();
+
     var div = d3.select("body")
         .append("div")
         .attr("id", "nodestooltip")
@@ -298,6 +300,10 @@ function mud_drawer(inp_json) {
         .style("width", "0px")
         .style("opacity", 0);
 
+    //makes draggable element
+    $(function () {
+        $("#nodestooltip").draggable();
+    });
 
     node.on("mouseover", function (d) {
 
