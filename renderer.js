@@ -83,28 +83,31 @@ function mud_drawer(inp_json) {
         }
     };
 
-  var link = svg.append("g")
-    .selectAll("path")
-    .data(graph.links.filter(function (d) {
-      if (allNodesObj.getNode(d.source).is_controlle_or_mycontroller()) { // it's enought to check the source because in the design the target is alwasy router or internet
-        return (set_difference(get_devices_names(d['outgoing']['device:flow']), excluded_models).length > 0 ||
-          set_difference(get_devices_names(d['incoming']['device:flow']), excluded_models).length > 0);
-      }
-      return (
-        (set_difference(get_devices_names(d['outgoing']['device:flow']), excluded_models).length > 0 ||
-          set_difference(get_devices_names(d['incoming']['device:flow']), excluded_models).length > 0) && // this filters the mudfile links that are deselected in the selection menu
-        !excluded_models.includes(d.source) && // also filter if the source or destination of the connection is in the exclusion list
-        !excluded_models.includes(d.target))
-    }))
-    .enter().append("svg:path")
-    .attr("fill", "none")
-    .attr("stroke", link_color)
-    .attr("stroke-width", function (d) { return Math.sqrt(parseInt(1)); })
-    .attr("src", function (d) { return d.source; })
-    .attr("dst", function (d) { return d.target; })
-    .attr("deviceflows", function (d) {
-      return JSON.stringify(d[traffic_direction]["device:flow"]);
-    });
+    var link = svg.append("g")
+        .selectAll("path")
+        .data(graph.links.filter(function (d) {
+            return (
+                (set_difference(get_devices_names(d['outgoing']['device:flow']), excluded_models).length > 0 ||
+                    set_difference(get_devices_names(d['incoming']['device:flow']), excluded_models).length > 0) && // this filters the mudfile links that are deselected in the selection menu
+                !excluded_models.includes(d.source) && // also filter if the source or destination of the connection is in the exclusion list
+                !excluded_models.includes(d.target)
+            )
+        }))
+        .enter().append("svg:path")
+        .attr("fill", "none")
+        .attr("stroke", link_color)
+        .attr("stroke-width", function (d) {
+            return Math.sqrt(parseInt(1));
+        })
+        .attr("src", function (d) {
+            return d.source;
+        })
+        .attr("dst", function (d) {
+            return d.target;
+        })
+        .attr("deviceflows", function (d) {
+            return JSON.stringify(d[traffic_direction]["device:flow"]);
+        });
 
 
     var node = svg.append("g")
@@ -129,52 +132,54 @@ function mud_drawer(inp_json) {
         .on("drag", dragged)
         .on("end", dragended));
 
-  node.append("image")
-    .attr("xlink:href", function (d) {
-      switch (d.group) {
-        case "01":
-          return "img/controller.svg";
-        case "02":
-          return "img/controller.svg";
-        default:
-          return ("img/group" + d.group + ".svg");
-      }
-    })
-    .attr("width", function (d) {
-      switch (d.group) {
-        case "3":
-          return 130;
-        default:
-          return 50;
-      }
-    })
-    .attr("height", function (d) {
-      switch (d.group) {
-        case "3":
-          return 130;
-        default:
-          return 50;
-      }
-    })
-    .attr("x", function (d) {
-      switch (d.group) {
-        case "3":
-          return -70;
-        case "4":
-          return -40;
-        default:
-          return -5;
-      }
-    })
-    .attr("y", function (d) {
-      switch (d.group) {
-        case "3":
-          return -50;
-        default:
-          return -20;
-      }
-    })
-    .attr("fill", function (d) { return color(d.group); });
+    node.append("image")
+        .attr("xlink:href", function (d) {
+            switch (d.group) {
+                case "01":
+                    return "img/controller.svg";
+                case "02":
+                    return "img/controller.svg";
+                default:
+                    return ("img/group" + d.group + ".svg");
+            }
+        })
+        .attr("width", function (d) {
+            switch (d.group) {
+                case "3":
+                    return 130;
+                default:
+                    return 50;
+            }
+        })
+        .attr("height", function (d) {
+            switch (d.group) {
+                case "3":
+                    return 130;
+                default:
+                    return 50;
+            }
+        })
+        .attr("x", function (d) {
+            switch (d.group) {
+                case "3":
+                    return -70;
+                case "4":
+                    return -40;
+                default:
+                    return -5;
+            }
+        })
+        .attr("y", function (d) {
+            switch (d.group) {
+                case "3":
+                    return -50;
+                default:
+                    return -20;
+            }
+        })
+        .attr("fill", function (d) {
+            return color(d.group);
+        });
 
     node.append("text")
         .attr("font-size", "0.8em")
@@ -280,20 +285,24 @@ function mud_drawer(inp_json) {
         d.fx = d3.event.x;
         d.fy = d3.event.y;
 
-  }
-  $("#nodestooltip").remove();
-  var div = d3.select("body")
-    .append("div")
-    .attr("id", "nodestooltip")
-    .attr("class", "node-tooltip")
-    .style("bottom", "0px")
-    .style("left", "0px")
-    .style("height", "0px")
-    .style("width", "0px")
-    .style("opacity", 0);
+    }
+
+    $("#nodestooltip").remove();
+
+    var div = d3.select("body")
+        .append("div")
+        .attr("id", "nodestooltip")
+        .attr("class", "node-tooltip")
+        .style("bottom", "0px")
+        .style("left", "0px")
+        .style("height", "0px")
+        .style("width", "0px")
+        .style("opacity", 0);
 
     //makes draggable element
-    $( function()  {$( "#nodestooltip" ).draggable(); } );
+    $(function () {
+        $("#nodestooltip").draggable();
+    });
 
   node.on("mouseover", function (d) {
 
