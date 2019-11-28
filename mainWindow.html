@@ -7,30 +7,44 @@
 
 <body>
 
-<input type="file" id="openfile-input" style="visibility: hidden;" multiple>
-<div class="icon-bar">
-  <div style="text-align: center; margin-top: 5px;">
-      <button id="openfile-button" class="icon-button" tooltip="Open Mud File(s)" flow="right"><img align="middle" src="img/menu_icons/openfile.png" width="35" height="35" vspace="5" onclick="drawer()"></button>
-      <button class="icon-button" tooltip="Refresh the Drawing" flow="right"><img align="middle" src="img/menu_icons/refresh.png" width="35" height="35" vspace="5" onclick="drawer()"></button>
-      <button id="SelectMudFiles" class="icon-button" tooltip="Select/Deselect Mud Files" flow="right" ><img align="middle" src="img/menu_icons/select.png" width="35" height="35" vspace="5"></button> 
-      <button id="button_incoming" class="icon-button" tooltip="Show Incmoing Traffic" flow="right" ><img align="middle" src="img/menu_icons/incoming.png" width="35" height="35" vspace="5" onclick="set_incoming()"></button> 
-      <button id="button_outgoing" class="icon-button" tooltip="Show Outgoing Traffic" flow="right" ><img align="middle" src="img/menu_icons/outgoing.png" width="35" height="35" vspace="5" onclick="set_outgoing()"></button> 
-  </div>
-</div>
-<div class="svg_board">
-    <svg class="svg" ></svg>  
-</div>
+<section id="vizholder">
+    <input type="file" id="openfile-input" style="display:none;" multiple>
+    <div class="icon-bar">
+        <div style="text-align: center; margin-top: 5px;">
+            <button id="openfile-button" class="icon-button" tooltip="Open Mud File(s)" flow="right"><img align="middle"
+                                                                                                          src="img/menu_icons/openfile.png" width="35"
+                                                                                                          height="35" vspace="5"></button>
+            <button class="icon-button" tooltip="Refresh the Drawing" flow="right"><img align="middle" src="img/menu_icons/refresh.png" width="35"
+                                                                                        height="35" vspace="5" onclick="drawer()"></button>
+            <button id="SelectMudFiles" class="icon-button" tooltip="Select/Deselect Mud Files" flow="right"><img align="middle"
+                                                                                                                  src="img/menu_icons/select.png"
+                                                                                                                  width="35" height="35" vspace="5">
+            </button>
+            <button id="button_incoming" class="icon-button" tooltip="Show Incmoing Traffic" flow="right"><img align="middle"
+                                                                                                               src="img/menu_icons/incoming.png"
+                                                                                                               width="35" height="35" vspace="5"
+                                                                                                               onclick="set_incoming()"></button>
+            <button id="button_outgoing" class="icon-button" tooltip="Show Outgoing Traffic" flow="right"><img align="middle"
+                                                                                                               src="img/menu_icons/outgoing.png"
+                                                                                                               width="35" height="35" vspace="5"
+                                                                                                               onclick="set_outgoing()"></button>
+        </div>
+    </div>
+    <div class="svg_board">
+        <svg class="svg"></svg>
+    </div>
 
-<!-- div for selecting and deselcting the mud files to preview -->
-<div id="mudSelectionDiv" class="select-deselect-muds">
-  <div id="fileNotLoaded" style="text-align: center" class="select-deselect-muds__text">No Mud-file loaded
-    <br>   
-    <img align="middle" src="img/other_icons/file_not_loaded.svg" width="100" height="100" vspace="30">
-  </div>
-</div>
+    <!-- div for selecting and deselcting the mud files to preview -->
+    <div id="mudSelectionDiv" class="select-deselect-muds">
+        <div id="fileNotLoaded" style="text-align: center" class="select-deselect-muds__text">No Mud-file loaded
+            <br>
+            <img align="middle" src="img/other_icons/file_not_loaded.svg" width="100" height="100" vspace="30">
+        </div>
+    </div>
+</section>
 </body>
 
-<script type="text/javascript" src="scripts/d3.v4.min.js"> </script>
+<script type="text/javascript" src="scripts/d3.v4.min.js"></script>
 <script type="text/javascript" src="scripts/jquery.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="scripts/psl.min.js"></script>
@@ -39,5 +53,6 @@
 <script type="text/javascript" src="scripts/utils.js"></script>
 <script type="text/javascript" src="scripts/helpers.js"></script>
 <script type="text/javascript" src="scripts/mud.js"></script>
+<script type="text/javascript" src="scripts/default_devices.js"></script>
 <script type="text/javascript" src="renderer.js"></script>
 
