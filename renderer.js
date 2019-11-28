@@ -626,10 +626,12 @@ $("div:not(#nodestooltip)").click(function () {
   if (tooltip_status == 'ready-to-hide') {
     $("div[id='nodestooltip']").each(function () {
       $(this).animate({ opacity: 0 }, { duration: 100 })
-        .animate({ bottom: "0px",
-        // left: "0px",
-        height: "0px",
-        width: "0px" })
+        .animate({
+          bottom: "0px",
+          // left: "0px",
+          height: "0px",
+          width: "0px"
+        })
     });
   }
   else if (tooltip_status = 'just-clicked') {
@@ -663,14 +665,14 @@ $('body').on('click', 'input[id="mudcheckbox"]', function () {
     var unchecked_mud_name = $(this).val();
     excluded_models.push(unchecked_mud_name);
 
-    var checked_nodes = $("#mudcheckbox:checked").map(function(){return (this.value)}).toArray()
-    var checked_controllers = checked_nodes.map(function(d){return (allNodesObj.getNode(d).get_controller())})
+    var checked_nodes = $("#mudcheckbox:checked").map(function () { return (this.value) }).toArray()
+    var checked_controllers = checked_nodes.map(function (d) { return (allNodesObj.getNode(d).get_controller()) })
     var unchecked_mud_controller = allNodesObj.getNode(unchecked_mud_name).get_controller();
     if (unchecked_mud_controller != null && !checked_controllers.includes(unchecked_mud_controller)) {
       excluded_models.push(unchecked_mud_controller);
     }
 
-    var checked_mycontrollers = checked_nodes.map(function(d){return (allNodesObj.getNode(d).get_mycontroller())})
+    var checked_mycontrollers = checked_nodes.map(function (d) { return (allNodesObj.getNode(d).get_mycontroller()) })
     var unchecked_mud_controller = allNodesObj.getNode(unchecked_mud_name).get_mycontroller();
     var unchecked_mud_mycontroller = allNodesObj.getNode(unchecked_mud_name).get_mycontroller();
     if (unchecked_mud_mycontroller != null && !checked_mycontrollers.includes(unchecked_mud_controller)) {
@@ -758,13 +760,45 @@ $('#openfile-input').change(function () {
   // files is a FileList of File objects. List some properties.
 
   var output = [];
-  var counter = 0 ;
+  var counter = 0;
   for (var i = 0, f; f = files[i]; i++) {
     (function (file) {
       var reader = new FileReader();
       // Closure to capture the file information.
       reader.onload = (function (theFile) {
         return function (e) {
+          try {
+            filescontent[counter] = JSON.parse(e.target.result);
+          }
+          catch (error) {
+            let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
+            html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
+            Swal.fire({
+              type: 'error',
+              title: 'Not a valid json file',
+              showConfirmButton: true,
+              html: html_message
+            });
+          }
+          // alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(filescontent[i]));
+          if (counter == files.length - 1) {
+            network.ready_to_draw = false;
+            for (var mudfile_idx in filescontent) {
+              network.add_mudfile(filescontent[mudfile_idx]);
+            }
+            network.create_network();
+
+            var interval = setInterval(function () {
+              if (network.ready_to_draw == false) {
+                return;
+              }
+              clearInterval(interval);
+              network_data = network.get_nodes_links_json();
+              mud_drawer(network_data);
+            }, 100);
+            $("#openfile-input")[0].value = "";
+          }
+          counter += 1;
             try {
               filescontent[counter] = JSON.parse(e.target.result);
             }
@@ -802,6 +836,24 @@ $('#openfile-input').change(function () {
       reader.readAsText(f);
     })(f);
   }
-
-
 });
+
+
+
+
+// loading the default devices
+network.ready_to_draw = false;
+for (var mudfile_idx in default_mudfiles) {
+  network.add_mudfile(default_mudfiles[mudfile_idx]);
+}
+network.create_network();
+
+var interval = setInterval(function () {
+  if (network.ready_to_draw == false) {
+    return;
+  }
+  clearInterval(interval);
+  network_data = network.get_nodes_links_json();
+  mud_drawer(network_data);
+}, 100);
+
