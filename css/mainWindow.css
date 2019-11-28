@@ -1,6 +1,6 @@
 .svg_board {
     display: block;
-    /* position:absolute; */
+     position:absolute;
     height:97vh;
     bottom: 0;
     top:0;
