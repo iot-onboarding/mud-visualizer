@@ -191,7 +191,7 @@ function openAboutWindow() {
 }
 
 function addDevicesOnScreen(devices_list){
-
+    // send the received json to renderer process
     global.sharedObj = JSON.stringify(devices_list);
     mainWindow.webContents.send('draw', 'draw');   
 }

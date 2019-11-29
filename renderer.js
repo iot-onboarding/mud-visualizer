@@ -136,26 +136,26 @@ function mud_drawer(inp_json) {
     node.append("image")
         .attr('id', function (d) {
 
-                switch (d.group) {
-                    case "01":
-                    case "02":
-                    case "1":
-                        if ($("visualnode1").length < 1) {
+            switch (d.group) {
+                case "01":
+                case "02":
+                case "1":
+                    if ($("visualnode1").length < 1) {
                         return "visualnode1";
-                        }
-                    case "2":
-                        if ($("visualnode2").length < 1) {
-                            return "visualnode2";
-                        }
-                    case "3":
-                        if ($("visualnode3").length < 1) {
-                            return "visualnode3";
-                        }
-                    case "4":
-                        if ($("visualnode4").length < 1) {
-                            return "visualnode4";
-                        }
-                }
+                    }
+                case "2":
+                    if ($("visualnode2").length < 1) {
+                        return "visualnode2";
+                    }
+                case "3":
+                    if ($("visualnode3").length < 1) {
+                        return "visualnode3";
+                    }
+                case "4":
+                    if ($("visualnode4").length < 1) {
+                        return "visualnode4";
+                    }
+            }
         })
         .attr("xlink:href", function (d) {
             switch (d.group) {
@@ -848,37 +848,6 @@ $('#openfile-input').change(function () {
                         $("#openfile-input")[0].value = "";
                     }
                     counter += 1;
-                    try {
-                        filescontent[counter] = JSON.parse(e.target.result);
-                    } catch (error) {
-                        let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
-                        html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Not a valid json file',
-                            showConfirmButton: true,
-                            html: html_message
-                        });
-                    }
-                    // alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(filescontent[i]));
-                    if (counter == files.length - 1) {
-                        network.ready_to_draw = false;
-                        for (var mudfile_idx in filescontent) {
-                            network.add_mudfile(filescontent[mudfile_idx]);
-                        }
-                        network.create_network()
-
-                        var interval = setInterval(function () {
-                            if (network.ready_to_draw == false) {
-                                return;
-                            }
-                            clearInterval(interval);
-                            network_data = network.get_nodes_links_json();
-                            mud_drawer(network_data);
-                        }, 100);
-                        $("#openfile-input")[0].value = "";
-                    }
-                    counter += 1;
                 }
             })(f);
             reader.readAsText(f);
@@ -911,37 +880,68 @@ var interval = setInterval(function () {
 
 
 function tour() {
-    $("#visualnode1").attr("data-intro", "Devices are shown in this area").attr("data-step","8");
-    $("#visualnode2").attr("data-intro", "This is the gataeway/router").attr("data-step","9");
-    $("#visualnode3").attr("data-intro", "If the traffic goes through here, it means it passes through the internet").attr("data-step","10");
-    $("#visualnode4").attr("data-intro", "Servers are shown on this side").attr("data-step","11");
+    $("#visualnode1").attr("data-intro", "Devices are shown in this area").attr("data-step", "8");
+    $("#visualnode2").attr("data-intro", "This is the gataeway/router").attr("data-step", "9");
+    $("#visualnode3").attr("data-intro", "If the traffic goes through here, it means it passes through the internet").attr("data-step", "10");
+    $("#visualnode4").attr("data-intro", "Servers are shown on this side").attr("data-step", "11");
     introJs().start();
 }
 
-// function openurl(){
-// Swal.fire({
-//   title: 'Enter the MUD file URL',
-//   input: 'text',
-//   inputAttributes: {
-//     autocapitalize: 'off'
-//   },
-//   showCancelButton: true,
-//   confirmButtonText: 'Load URL',
-//   showLoaderOnConfirm: true,
-//   preConfirm: (url) => {
-//     // collect the data using https
-//     var data = "";
-//     var test = $.get(url, function(response){
-//         response.on('data', (append) => {
-//             data += append;
-//         });
-//
-//         response.on('end', () => {
-//             // when collect ends, show the result on the screen
-//             addDevicesOnScreen({data});
-//         });
-//     });
-//   },
-//   allowOutsideClick: () => !Swal.isLoading()
-// })
-// }
+function openurl() {
+    Swal.fire({
+        title: 'Enter the MUD file URL',
+        input: 'text',
+        inputAttributes: {
+            autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Load URL',
+        showLoaderOnConfirm: true,
+        preConfirm: (url) => {
+            // collect the data using https
+            var data = "";
+            $.ajax({
+                url: 'https://www.mudmaker.org/cloud-service.json',
+                cors: true,
+                headers: {'Access-Control-Allow-Origin': '*'},
+                dataType: 'JSON',
+                jsonpCallback: 'photo',
+                type: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    var recv_filescontent;
+                    try {
+                        var recv_filescontent = JSON.parse(data);
+                    } catch (error) {
+                        let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
+                        html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Not a valid json file',
+                            showConfirmButton: true,
+                            html: html_message
+                        });
+                    }
+                    network.ready_to_draw = false;
+
+                    network.add_mudfile(recv_filescontent);
+
+                    network.create_network();
+
+                    var interval = setInterval(function () {
+                        if (network.ready_to_draw == false) {
+                            return;
+                        }
+                        clearInterval(interval);
+                        network_data = network.get_nodes_links_json();
+                        mud_drawer(network_data);
+                    }, 100);
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    })
+}
