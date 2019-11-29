@@ -909,7 +909,7 @@ function openurl() {
                 type: 'GET',
                 success: function (data) {
                     console.log(data);
-                    var recv_filescontent;
+                    var recv_filescontent = data ;
                     // try {
                     //     var recv_filescontent = JSON.parse(data);
                     // } catch (error) {
