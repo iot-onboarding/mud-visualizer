@@ -18,9 +18,6 @@ This tool can be used to visualize the MUD files in JSON format.
 - [Motivation](#Motivation)
 - [Installation](#installation)
 - [Supported MUD Abstractions](#features)
-- [Contributing](#contributing)
-- [Team](#team)
-- [FAQ](#faq)
 - [Support](#support)
 - [License](#license)
 
