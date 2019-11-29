@@ -6,9 +6,9 @@ var fs = require('fs');
 
 
 // library to read the json files from URLs
-const https = require('https')
+const https = require('https');
 //library to prompt the text input for the URLs
-const prompt = require('electron-prompt')
+const prompt = require('electron-prompt');
 
 
 const { dialog, app, BrowserWindow, Menu} = electron; 
@@ -25,7 +25,7 @@ app.on('ready', function () {
             nodeIntegration: true,
         }
     });
-    mainWindow.setIcon(path.join(__dirname, 'img/other_icons/icon.png'))
+    mainWindow.setIcon(path.join(__dirname, 'img/other_icons/icon.png'));
     // mainWindow.maximize()
 
     // openninng dev tools 
@@ -165,7 +165,7 @@ const mainMenuTemplate = [
             }
         ]
     }
-]
+];
 
 
 let aboutWindow;

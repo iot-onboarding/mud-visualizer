@@ -911,9 +911,37 @@ var interval = setInterval(function () {
 
 
 function tour() {
-    $("#visualnode1").attr("data-intro", "Devices are shown in this area").attr("data-step","7");
-    $("#visualnode2").attr("data-intro", "This is the gataeway/router").attr("data-step","8");
-    $("#visualnode3").attr("data-intro", "If the traffic goes through here, it means it passes through the internet").attr("data-step","9");
-    $("#visualnode4").attr("data-intro", "Servers are shown on this side").attr("data-step","10");
+    $("#visualnode1").attr("data-intro", "Devices are shown in this area").attr("data-step","8");
+    $("#visualnode2").attr("data-intro", "This is the gataeway/router").attr("data-step","9");
+    $("#visualnode3").attr("data-intro", "If the traffic goes through here, it means it passes through the internet").attr("data-step","10");
+    $("#visualnode4").attr("data-intro", "Servers are shown on this side").attr("data-step","11");
     introJs().start();
 }
+
+// function openurl(){
+// Swal.fire({
+//   title: 'Enter the MUD file URL',
+//   input: 'text',
+//   inputAttributes: {
+//     autocapitalize: 'off'
+//   },
+//   showCancelButton: true,
+//   confirmButtonText: 'Load URL',
+//   showLoaderOnConfirm: true,
+//   preConfirm: (url) => {
+//     // collect the data using https
+//     var data = "";
+//     var test = $.get(url, function(response){
+//         response.on('data', (append) => {
+//             data += append;
+//         });
+//
+//         response.on('end', () => {
+//             // when collect ends, show the result on the screen
+//             addDevicesOnScreen({data});
+//         });
+//     });
+//   },
+//   allowOutsideClick: () => !Swal.isLoading()
+// })
+// }
