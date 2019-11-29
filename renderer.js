@@ -910,18 +910,18 @@ function openurl() {
                 success: function (data) {
                     console.log(data);
                     var recv_filescontent;
-                    try {
-                        var recv_filescontent = JSON.parse(data);
-                    } catch (error) {
-                        let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
-                        html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Not a valid json file',
-                            showConfirmButton: true,
-                            html: html_message
-                        });
-                    }
+                    // try {
+                    //     var recv_filescontent = JSON.parse(data);
+                    // } catch (error) {
+                    //     let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
+                    //     html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
+                    //     Swal.fire({
+                    //         type: 'error',
+                    //         title: 'Not a valid json file',
+                    //         showConfirmButton: true,
+                    //         html: html_message
+                    //     });
+                    // }
                     network.ready_to_draw = false;
 
                     network.add_mudfile(recv_filescontent);
