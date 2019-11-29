@@ -18,6 +18,7 @@ This tool can be used to visualize the MUD files in JSON format.
 - [Motivation](#Motivation)
 - [Installation](#installation)
 - [Supported MUD Abstractions](#features)
+- [Contribution](#contribution)
 - [Support](#support)
 - [License](#license)
 
@@ -46,6 +47,10 @@ Currently the following MUD abstractions are supported in both `incoming` and `o
 - `manufacturer`
 - `my-controller`
 - `controller`
+
+## Contribution
+
+Contributions are welcome! Submit your pull requests to the `master` branch.
 
 ## Support
 
