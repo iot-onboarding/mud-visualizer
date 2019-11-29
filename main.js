@@ -4,8 +4,16 @@ const path = require('path');
 // const d3 = require('d3');
 var fs = require('fs');
 
-const {dialog, app, BrowserWindow, Menu} = electron;
-let mainWindow;
+
+// library to read the json files from URLs
+const https = require('https')
+//library to prompt the text input for the URLs
+const prompt = require('electron-prompt')
+
+
+const { dialog, app, BrowserWindow, Menu} = electron; 
+let mainWindow; 
+
 
 var json_data_loaded = false;
 // Listen for app to be ready 
@@ -88,6 +96,42 @@ const mainMenuTemplate = [
                     json_data_loaded = true;
                 }
             },
+            {
+                label: 'Open MUD-URL',
+                accelerator: process.platform == 'darwin' ? 'Command+Shift+O' : 'Ctrl+Shift+O',
+                click(){
+                    //prompt URL of the MUD file
+                    prompt({
+                        title: 'Insert the MUD file URL',
+                        label: 'URL:',
+                        value: 'https://example.com/mud_file.json',
+                        inputAttrs: {
+                            type: 'url'
+                        },
+                        type: 'input'
+                    })
+                    .then((r) => {
+                        if(r === null) {
+                            console.log('No URL inserted');
+                        } else {
+
+                            // collect the data using https
+                            var data = "";
+                            var test = https.get(r,{}, function(response){
+                                response.on('data', (append) => {
+                                    data += append;
+                                });
+
+                                response.on('end', () => {
+                                    // when collect ends, show the result on the screen
+                                    addDevicesOnScreen({data});
+                                });
+                            });
+                        }
+                    })
+                    .catch(console.error);
+                }
+            },
             {   // label and shortcut for quititng the application
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
@@ -146,3 +190,8 @@ function openAboutWindow() {
 
 }
 
+function addDevicesOnScreen(devices_list){
+
+    global.sharedObj = JSON.stringify(devices_list);
+    mainWindow.webContents.send('draw', 'draw');   
+}
