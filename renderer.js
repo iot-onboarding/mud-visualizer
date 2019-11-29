@@ -313,7 +313,7 @@ function mud_drawer(inp_json) {
 
     $("#nodestooltip").remove();
 
-    var div = d3.select("body")
+    var div = d3.select("#vizholder")
         .append("div")
         .attr("id", "nodestooltip")
         .attr("class", "node-tooltip")
