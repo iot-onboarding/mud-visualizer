@@ -81,7 +81,8 @@ function mud_drawer(inp_json) {
                 graph.links[i].linknum += 0.5;
             }
         }
-    };
+    }
+    ;
 
     var link = svg.append("g")
         .selectAll("path")
@@ -133,6 +134,29 @@ function mud_drawer(inp_json) {
         .on("end", dragended));
 
     node.append("image")
+        .attr('id', function (d) {
+
+                switch (d.group) {
+                    case "01":
+                    case "02":
+                    case "1":
+                        if ($("visualnode1").length < 1) {
+                        return "visualnode1";
+                        }
+                    case "2":
+                        if ($("visualnode2").length < 1) {
+                            return "visualnode2";
+                        }
+                    case "3":
+                        if ($("visualnode3").length < 1) {
+                            return "visualnode3";
+                        }
+                    case "4":
+                        if ($("visualnode4").length < 1) {
+                            return "visualnode4";
+                        }
+                }
+        })
         .attr("xlink:href", function (d) {
             switch (d.group) {
                 case "01":
@@ -304,7 +328,7 @@ function mud_drawer(inp_json) {
         $("#nodestooltip").draggable();
     });
 
-  node.on("mouseover", function (d) {
+    node.on("mouseover", function (d) {
 
         d3.selectAll('*').interrupt();
         d3.selectAll('image').each(function (d) {
@@ -565,13 +589,13 @@ network.ready_to_draw = false;
 
 
 if (userAgent.indexOf(' electron/') > -1) {
-  // in case we are running electron
-  function opengithub() {
-    // used in about.html page
-    var { shell } = require('electron');
-    let url = "https://github.com/vafa-Andalibi/mudvisualizer";
-    shell.openExternal(url);
-  }
+    // in case we are running electron
+    function opengithub() {
+        // used in about.html page
+        var {shell} = require('electron');
+        let url = "https://github.com/vafa-Andalibi/mudvisualizer";
+        shell.openExternal(url);
+    }
 
     require('electron').ipcRenderer.on('draw', (event, message) => {
         d3.selectAll("svg > *").remove();
@@ -813,54 +837,53 @@ $('#openfile-input').change(function () {
                         }
                         network.create_network();
 
-            var interval = setInterval(function () {
-              if (network.ready_to_draw == false) {
-                return;
-              }
-              clearInterval(interval);
-              network_data = network.get_nodes_links_json();
-              mud_drawer(network_data);
-            }, 100);
-            $("#openfile-input")[0].value = "";
-          }
-          counter += 1;
-            try {
-              filescontent[counter] = JSON.parse(e.target.result);
-            }
-            catch (error) {
-              let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
-              html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
-              Swal.fire({
-                type: 'error',
-                title: 'Not a valid json file',
-                showConfirmButton: true,
-                html: html_message
-              });
-            }
-            // alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(filescontent[i]));
-            if (counter == files.length-1){
-              network.ready_to_draw = false;
-              for (var mudfile_idx in filescontent) {
-                network.add_mudfile(filescontent[mudfile_idx]);
-              }
-              network.create_network()
+                        var interval = setInterval(function () {
+                            if (network.ready_to_draw == false) {
+                                return;
+                            }
+                            clearInterval(interval);
+                            network_data = network.get_nodes_links_json();
+                            mud_drawer(network_data);
+                        }, 100);
+                        $("#openfile-input")[0].value = "";
+                    }
+                    counter += 1;
+                    try {
+                        filescontent[counter] = JSON.parse(e.target.result);
+                    } catch (error) {
+                        let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
+                        html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Not a valid json file',
+                            showConfirmButton: true,
+                            html: html_message
+                        });
+                    }
+                    // alert('json global var has been set to parsed json of this file here it is unevaled = \n' + JSON.stringify(filescontent[i]));
+                    if (counter == files.length - 1) {
+                        network.ready_to_draw = false;
+                        for (var mudfile_idx in filescontent) {
+                            network.add_mudfile(filescontent[mudfile_idx]);
+                        }
+                        network.create_network()
 
-              var interval = setInterval(function () {
-                if (network.ready_to_draw == false) {
-                  return;
+                        var interval = setInterval(function () {
+                            if (network.ready_to_draw == false) {
+                                return;
+                            }
+                            clearInterval(interval);
+                            network_data = network.get_nodes_links_json();
+                            mud_drawer(network_data);
+                        }, 100);
+                        $("#openfile-input")[0].value = "";
+                    }
+                    counter += 1;
                 }
-                clearInterval(interval);
-                network_data = network.get_nodes_links_json();
-                mud_drawer(network_data);
-              }, 100);
-              $("#openfile-input")[0].value = "";
-            }
-            counter += 1;
-        }
-      })(f);
-      reader.readAsText(f);
-    })(f);
-  }
+            })(f);
+            reader.readAsText(f);
+        })(f);
+    }
 });
 
 
@@ -886,3 +909,11 @@ var interval = setInterval(function () {
     mud_drawer(network_data);
 }, 100);
 
+
+function tour() {
+    $("#visualnode1").attr("data-intro", "Devices are shown in this area").attr("data-step","7");
+    $("#visualnode2").attr("data-intro", "This is the gataeway/router").attr("data-step","8");
+    $("#visualnode3").attr("data-intro", "If the traffic goes through here, it means it passes through the internet").attr("data-step","9");
+    $("#visualnode4").attr("data-intro", "Servers are shown on this side").attr("data-step","10");
+    introJs().start();
+}
