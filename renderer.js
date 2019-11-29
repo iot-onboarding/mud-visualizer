@@ -901,7 +901,7 @@ function openurl() {
             // collect the data using https
             var data = "";
             $.ajax({
-                url: 'https://www.mudmaker.org/cloud-service.json',
+                url: url,
                 cors: true,
                 headers: {'Access-Control-Allow-Origin': '*'},
                 dataType: 'JSON',
