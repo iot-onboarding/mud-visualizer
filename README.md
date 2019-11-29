@@ -26,7 +26,7 @@ This tool can be used to visualize the MUD files in JSON format.
 
 ## Motivation
 
-MUD files are plain text files in JSON format that contain ACL rules for a device. A MUD file can contains tens or hundrends of ACL rules which makes it difficult to read and validate the files manually. MUD-Visualizer will help you to read and validate (and modify in near future) the MUD files.  
+MUD files are plain text files in JSON format that contain ACL rules for a device. A MUD file can contains tens or hundrends of ACL rules which makes it difficult to read and validate the files manually. mud-visualizer will help you to read and validate (and modify in near future) the MUD files.  
 
 ## Installation
 

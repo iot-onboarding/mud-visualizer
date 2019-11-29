@@ -1,8 +1,13 @@
 // This file contains the main two class for building the network of mud nodes: MUD_Network and MUD
 
+var userAgent = navigator.userAgent.toLowerCase();
+if (userAgent.indexOf(' electron/') > -1) {
+   // Electron-specific code
+   var uuidv4 = require('uuid/v4');
+    var Swal = require('sweetalert2');
+    var psl = require('psl');
+}
 
-const uuidv4 = require('uuid/v4');
-const Swal = require('sweetalert2');
 var incoming = "incoming";
 var outgoing = "outgoing";
 
@@ -591,7 +596,6 @@ class Mud {
                 }
             }
         }
-
     }
 
     is_FromDevicePolicy(acl) {
@@ -919,7 +923,6 @@ class Mud {
 
     extract_manufacturer() {
         var mud_url = find_values_by_key(this.mudfile, 'mud-url')[0];
-        let psl = require('psl');
         return psl.get(this.extractHostname(mud_url));
     }
 
