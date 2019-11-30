@@ -160,11 +160,12 @@ function mud_drawer(inp_json) {
         .attr("xlink:href", function (d) {
             switch (d.group) {
                 case "01":
-                    return "img/controller.svg";
                 case "02":
-                    return "img/controller.svg";
-                default:
+                    return "img/controller.png";
+                case "3":
                     return ("img/group" + d.group + ".svg");
+                default:
+                    return ("img/group" + d.group + ".png");
             }
         })
         .attr("width", function (d) {
@@ -216,7 +217,7 @@ function mud_drawer(inp_json) {
                 case "1":
                     return -15;
                 case "2": //router logo x axis
-                    return -30;
+                    return -10;
                 case "3": // intenret logo x axis
                     return 5;
                 case "4":
