@@ -41,8 +41,8 @@
     margin-bottom:5px;
     margin-right: calc(100% - 75px);
     margin-left:10px;
-    background-color: #F3F3CC;
-    border: 1px solid #555;
+    /*background-color: #F3F3CC;*/
+    /*border: 1px solid #555;*/
 }
 
 .toolbar-button {
