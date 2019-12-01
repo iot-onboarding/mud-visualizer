@@ -900,9 +900,10 @@ function openurl() {
         showLoaderOnConfirm: true,
         preConfirm: (url) => {
             // collect the data using https
+            var cors_anywhere_url = "https://cors-anywhere.herokuapp.com/" + url
             var data = "";
             $.ajax({
-                url: url,
+                url: cors_anywhere_url,
                 cors: true,
                 headers: {'Access-Control-Allow-Origin': '*'},
                 dataType: 'JSON',
@@ -911,24 +912,9 @@ function openurl() {
                 success: function (data) {
                     console.log(data);
                     var recv_filescontent = data ;
-                    // try {
-                    //     var recv_filescontent = JSON.parse(data);
-                    // } catch (error) {
-                    //     let html_message = "<div style='text-align: left; padding: 5px;'>The following JSON file is not valid:</div>";
-                    //     html_message += "<pre style='border: 1px solid #555555;text-align: left; overflow-x: auto;'>" + e.target.result + "</pre>"
-                    //     Swal.fire({
-                    //         type: 'error',
-                    //         title: 'Not a valid json file',
-                    //         showConfirmButton: true,
-                    //         html: html_message
-                    //     });
-                    // }
                     network.ready_to_draw = false;
-
                     network.add_mudfile(recv_filescontent);
-
                     network.create_network();
-
                     var interval = setInterval(function () {
                         if (network.ready_to_draw == false) {
                             return;
