@@ -466,7 +466,7 @@ function mud_drawer(inp_json) {
             var clicked_node_protocols = clicked_node.get_protocols(traffic_direction);
             div
                 .html(function () {
-                    let table = '<table id="ace_protocols">'
+                    let table = '<div><a href="#"id="tooltip-close" onclick="close_tooltip()" >x</a></div><table id="ace_protocols">'
                     if (traffic_direction == "outgoing") {
                         table += "<tr>\
             <th>Destination</th>";
