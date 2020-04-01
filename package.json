@@ -18,5 +18,8 @@
     "jquery": "^3.4.1",
     "sweetalert2": "^8.14.0",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "minimist": "^1.2.5"
   }
 }
