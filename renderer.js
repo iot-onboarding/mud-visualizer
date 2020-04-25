@@ -398,8 +398,8 @@ function mud_drawer(inp_json) {
                         }
                     } else {
                         d3.select(this)
-                        // .transition()
-                        // .duration(100)
+                            // .transition()
+                            // .duration(100)
                             .attr('opacity', 0.5);
                     }
                 })
@@ -416,25 +416,25 @@ function mud_drawer(inp_json) {
 
             var current_node_links = d[traffic_direction].links;
             d3.selectAll('path').each(function (d, i) {
-                    if (current_node_links.indexOf(d.uid) != -1) {
-                        d3.select(this)
-                            .style("stroke", link_color)
-                            .style("stroke-width", 1);
-                        totalLength = 0;
-                        d3.select(this)
-                            .attr("stroke-dasharray", totalLength + " " + totalLength)
-                            .attr("stroke-dashoffset", totalLength);
+                if (current_node_links.indexOf(d.uid) != -1) {
+                    d3.select(this)
+                        .style("stroke", link_color)
+                        .style("stroke-width", 1);
+                    totalLength = 0;
+                    d3.select(this)
+                        .attr("stroke-dasharray", totalLength + " " + totalLength)
+                        .attr("stroke-dashoffset", totalLength);
 
-                        // d3.select(this)
-                        // .attr('opacity', 1);
-                        //   .transition();
-                    } else {
-                        d3.select(this)
-                            .transition()
-                            .duration(500)
-                            .attr('opacity', 1);
-                    }
+                    // d3.select(this)
+                    // .attr('opacity', 1);
+                    //   .transition();
+                } else {
+                    d3.select(this)
+                        .transition()
+                        .duration(500)
+                        .attr('opacity', 1);
                 }
+            }
             )
         }
 
@@ -466,7 +466,7 @@ function mud_drawer(inp_json) {
             var clicked_node_protocols = clicked_node.get_protocols(traffic_direction);
             div
                 .html(function () {
-                    let table = '<div><a href="#"id="tooltip-close" onclick="close_tooltip()" >x</a></div><table id="ace_protocols">'
+                    let table = '<div><a href="#" id="tooltip-close" onclick="close_tooltip()" >x</a></div><table id="ace_protocols">'
                     if (traffic_direction == "outgoing") {
                         table += "<tr>\
             <th>Destination</th>";
@@ -593,7 +593,7 @@ if (userAgent.indexOf(' electron/') > -1) {
     // in case we are running electron
     function opengithub() {
         // used in about.html page
-        var {shell} = require('electron');
+        var { shell } = require('electron');
         let url = "https://github.com/vafa-Andalibi/mudvisualizer";
         shell.openExternal(url);
     }
@@ -670,7 +670,7 @@ $("div:not(#mudSelectionDiv)").click(function () {
 $("div:not(#nodestooltip)").click(function () {
     if (tooltip_status == 'ready-to-hide') {
         $("div[id='nodestooltip']").each(function () {
-            $(this).animate({opacity: 0}, {duration: 100})
+            $(this).animate({ opacity: 0 }, { duration: 100 })
                 .animate({
                     bottom: "0px",
                     // left: "0px",
@@ -684,6 +684,20 @@ $("div:not(#nodestooltip)").click(function () {
         tooltip_status = 'ready-to-hide';
     }
 });
+
+function close_tooltip() {
+    $("div[id='nodestooltip']").each(function () {
+        $(this).animate({ opacity: 0 }, { duration: 100 })
+            .animate({
+                bottom: "0px",
+                // left: "0px",
+                height: "0px",
+                width: "0px",
+            }, function () {
+                $(this).css('z-index', -1)
+            })
+    })
+}
 
 // selecting/unselecting a mudfile
 $('body').on('click', 'input[id="mudcheckbox"]', function () {
@@ -767,7 +781,7 @@ set_outgoing();
 
 // used in about.html page
 function opengithub() {
-    const {shell} = require('electron');
+    const { shell } = require('electron');
     let url = "https://github.com/vafa-Andalibi/mudvisualizer";
     shell.openExternal(url);
 }
@@ -782,7 +796,7 @@ function get_devices_names(arr) {
 
 function openfile() {
     var files_data = {};
-    dialog.showOpenDialog({properties: ["multiSelections", "openFile"]}, (fileNames) => {
+    dialog.showOpenDialog({ properties: ["multiSelections", "openFile"] }, (fileNames) => {
         // fileNames is an array that contains all the selected
         if (fileNames === undefined) {
             console.log("No file selected");
@@ -799,6 +813,7 @@ function openfile() {
     });
     json_data_loaded = true;
 }
+
 
 
 $('#openfile-button').click(function () {
@@ -905,13 +920,13 @@ function openurl() {
             $.ajax({
                 url: cors_anywhere_url,
                 cors: true,
-                headers: {'Access-Control-Allow-Origin': '*'},
+                headers: { 'Access-Control-Allow-Origin': '*' },
                 dataType: 'JSON',
                 jsonpCallback: 'photo',
                 type: 'GET',
                 success: function (data) {
                     console.log(data);
-                    var recv_filescontent = data ;
+                    var recv_filescontent = data;
                     network.ready_to_draw = false;
                     network.add_mudfile(recv_filescontent);
                     network.create_network();
