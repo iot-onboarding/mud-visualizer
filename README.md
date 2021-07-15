@@ -15,11 +15,12 @@ This tool can be used to visualize the MUD files in JSON format.
 
 ## Table of Contents 
 
-- [Motivation](#Motivation)
+- [Motivation](#motivation)
 - [Installation](#installation)
-- [Supported MUD Abstractions](#features)
+- [Supported MUD Abstractions](#supported-mud-abstractions)
 - [Contribution](#contribution)
 - [Support](#support)
+- [Citation](#citation)
 - [License](#license)
 
 ## Motivation
@@ -57,6 +58,30 @@ Contributions are welcome! Submit your pull requests to the `master` branch.
 Feel free to reach out to us at <mud@ietf.org>.
 
 Also, you are strongly encouraged to use Github's <a href="https://github.com/iot-onboarding/mud-visualizer/issues" target="_blank">Issues</a> to submit new issues, or request enhancements or new features.
+
+## Citation
+
+If you find this tool useful in your research, please consider citing our papers:
+
+```
+@inproceedings{andalibi2021analysis,
+  title={On the Analysis of MUD-Files’ Interactions, Conflicts, and Configuration Requirements Before Deployment},
+  author={Andalibi, Vafa and Lear, Eliot and Kim, DongInn and Camp, L Jean},
+  booktitle={5th EAI International Conference on Safety and Security in Internet of Things, SaSeIoT},
+  year={2021}
+}
+```
+
+```
+@inproceedings{andalibi2021making,
+  title={Making Access Control Easy in IoT},
+  author={Andalibi, Vafa and Dev, Jayati and Kim, DongInn and Lear, Eliot and Camp, L Jean},
+  booktitle={International Symposium on Human Aspects of Information Security and Assurance},
+  pages={127--137},
+  year={2021},
+  organization={Springer}
+}
+```
 
 ## License
 
