@@ -83,6 +83,16 @@ If you find this tool useful in your research, please consider citing our papers
 }
 ```
 
+```
+@inproceedings{andalibi2021visualization,
+  title={Is Visualization Enough? Evaluating the Efficacy of MUD-Visualizer in Enabling Ease of Deployment for Manufacturer Usage Description (MUD)},
+  author={Andalibi, Vafa and Dev, Jayati and Kim, DongInn and Lear, Eliot and Camp, L Jean},
+  booktitle={Annual Computer Security Applications Conference},
+  pages={337--348},
+  year={2021}
+}
+```
+
 ## License
 
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) 
